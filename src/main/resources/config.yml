@@ -1,3 +1,5 @@
+# see: https://github.com/Chuanwise/network-watchdog
+
 # Is function enable.
 enable: true
 
@@ -8,6 +10,7 @@ debug: false
 urls:
   - https://www.qq.com
   - https://www.baidu.com
+  - https://cn.bing.com
 
 # Send self introduction to all HTTP URLs, message key is self-introduction.
 introduce: false
