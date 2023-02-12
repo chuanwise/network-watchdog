@@ -101,3 +101,7 @@ while true; do
 done
 pause
 ```
+
+## 事件
+
+* `cn.chuanwise.networkwatchdog.NetworkDisconnectedEvent`：当插件发现网络断开时，将会发布该事件。若其被取消，则服务器**本次**不会被关闭。
