@@ -1,0 +1,19 @@
+# Is function enable.
+enable: true
+
+# Is debug logs printed.
+debug: false
+
+# Testing URLs.
+urls:
+  - https://www.qq.com
+  - https://www.baidu.com
+
+# Send self introduction to all HTTP URLs, message key is self-introduction.
+introduce: false
+
+# How many tick(s) should check if network is connected.
+interval: 6000
+
+# Shut down the server after checking how many continuous times for checking network.
+threshold: 1
