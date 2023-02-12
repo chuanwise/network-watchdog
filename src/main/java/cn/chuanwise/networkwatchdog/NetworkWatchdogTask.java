@@ -101,6 +101,8 @@ public class NetworkWatchdogTask
                     } else {
                         runTask(() -> Loggers.warning("Response code for URL " + url + " is " + responseCode + ", not 200!"));
                     }
+    
+                    connection.disconnect();
                 } else {
                     runTask(() -> Loggers.debug("Test successfully, url is " + url +", and it's not a http connection"));
                 }
