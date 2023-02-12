@@ -2,6 +2,8 @@ name: NetworkWatchdog
 version: 1.0-SNAPSHOT
 author: Chuanwise
 main: cn.chuanwise.networkwatchdog.NetworkWatchdogPlugin
+softdepend:
+  - PlaceholderAPI
 
 commands:
   network-watchdog:
