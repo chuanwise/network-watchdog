@@ -1,8 +1,8 @@
 package cn.chuanwise.networkwatchdog;
 
 import cn.chuanwise.networkwatchdog.util.Exceptions;
-import cn.chuanwise.networkwatchdog.util.Loggers;
 import cn.chuanwise.networkwatchdog.util.Resources;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,7 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -45,9 +44,19 @@ public class NetworkWatchdogPlugin
     @Override
     public void onEnable() {
         configuration = null;
+        
+        new Metrics(this, 17705);
     
-        loadConfiguration();
-        loadMessages();
+        try {
+            loadConfiguration();
+        } catch (IOException e) {
+            Exceptions.report(getServer().getConsoleSender(), e, "Loading configuration");
+        }
+        try {
+            loadMessages();
+        } catch (IOException e) {
+            Exceptions.report(getServer().getConsoleSender(), e, "Loading messages");
+        }
     
         // register commands
         final PluginCommand pluginCommand = getCommand("network-watchdog");
@@ -57,7 +66,7 @@ public class NetworkWatchdogPlugin
         getServer().getScheduler().runTaskTimerAsynchronously(this, NetworkWatchdogTask.getInstance(), 0, 1);
     }
     
-    public void loadConfiguration() {
+    public void loadConfiguration() throws IOException {
         final File dataFolder = getDataFolder();
         if (!dataFolder.isDirectory() && !dataFolder.mkdirs()) {
             throw new IllegalStateException("Can not create data folder: " + dataFolder.getAbsolutePath());
@@ -67,18 +76,15 @@ public class NetworkWatchdogPlugin
         configuration = new NetworkWatchdogConfiguration();
         
         if (!file.isFile()) {
-            try {
-                Resources.dump(getClassLoader(), "config.yml", file);
-            } catch (IOException e) {
-                Exceptions.report(getServer().getConsoleSender(), e, "Saving default configuration to file: " + file.getAbsolutePath());
-            }
+            Resources.dump(getClassLoader(), "config.yml", file);
         }
     
         final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
         configuration.setDebug(yaml.getBoolean("debug"));
         configuration.setEnable(yaml.getBoolean("enable"));
-        configuration.setInterval(yaml.getLong("interval"));
+        configuration.setInterval(yaml.getInt("interval"));
         configuration.setThreshold(yaml.getInt("threshold"));
+        configuration.setIntroduce(yaml.getBoolean("introduce"));
         configuration.setUrls(yaml.getStringList("urls").stream()
             .map(url -> {
                 try {
@@ -90,10 +96,9 @@ public class NetworkWatchdogPlugin
             })
             .filter(Objects::nonNull)
             .collect(Collectors.toSet()));
-        configuration.setIntroduce(yaml.getBoolean("introduce"));
     }
     
-    public void loadMessages() {
+    public void loadMessages() throws IOException {
         final File dataFolder = getDataFolder();
         if (!dataFolder.isDirectory() && !dataFolder.mkdirs()) {
             throw new IllegalStateException("Can not create data folder: " + dataFolder.getAbsolutePath());
@@ -101,11 +106,7 @@ public class NetworkWatchdogPlugin
     
         final File file = new File(dataFolder, "messages.yml");
         if (!file.isFile()) {
-            try {
-                Resources.dump(getClassLoader(), "messages.yml", file);
-            } catch (IOException e) {
-                Exceptions.report(getServer().getConsoleSender(), e, "Saving default messages to file: " + file.getAbsolutePath());
-            }
+            Resources.dump(getClassLoader(), "messages.yml", file);
         }
     
         messages = new NetworkWatchdogMessages(YamlConfiguration.loadConfiguration(file));
