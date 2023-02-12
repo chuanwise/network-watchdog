@@ -1,10 +1,12 @@
 package cn.chuanwise.networkwatchdog;
 
+import cn.chuanwise.networkwatchdog.util.Exceptions;
 import cn.chuanwise.networkwatchdog.util.Loggers;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -29,22 +31,36 @@ public class NetworkWatchdogCommand
             .filter(s -> !s.isEmpty())
             .collect(Collectors.toList());
         
-        if (arguments.size() != 1) {
+        if (!arguments.isEmpty()) {
             displayUsage(sender);
             return true;
         }
     
-        if ("reload".equals(arguments.get(0))) {
-            NetworkWatchdogPlugin.getInstance().loadMessages();
-            NetworkWatchdogPlugin.getInstance().loadConfiguration();
-            Loggers.sendInfo(sender, "已尝试重新载入配置文件");
+        final String permission = "network-watchdog.command";
+        if (sender.hasPermission(permission)) {
+            boolean success = true;
+            try {
+                NetworkWatchdogPlugin.getInstance().loadMessages();
+            } catch (IOException e) {
+                Exceptions.report(sender, e, "Loading messages");
+                success = false;
+            }
+            try {
+                NetworkWatchdogPlugin.getInstance().loadConfiguration();
+            } catch (IOException e) {
+                Exceptions.report(sender, e, "Loading configuration");
+                success = false;
+            }
+            if (success) {
+                Loggers.sendInfo(sender, "Configuration and messages reloaded!");
+            }
         } else {
-            displayUsage(sender);
+            Loggers.sendError(sender, "Require permission: " + permission);
         }
         return true;
     }
     
     private void displayUsage(CommandSender sender) {
-        Loggers.sendInfo(sender, "§7/§3nw reload§7 - §f重新载入插件配置文件");
+        Loggers.sendInfo(sender, "Command Usages: \n§7- /§3nw reload§7 - §fReload configuration and messages.");
     }
 }
