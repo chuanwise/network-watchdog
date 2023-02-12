@@ -69,10 +69,34 @@ self-introduction: |
 
 ## 权限
 
-### network-watchdog.reload
+* `network-watchdog.reload`：使用 `/nw reload` 重载插件配置的权限。
+* `network-watchdog.debug`：使用 `/nw reload` 出现异常时显示异常信息的权限。
 
-使用 `/nw reload` 重载插件配置的权限。
+## 避免自动重启
 
-### network-watchdog.debug
+若你的开服脚本写了无限循环，可在无限循环前 ping 某一网络并检查是否联通。若联通，则开服，否则跳出开服脚本循环。
 
-使用 `/nw reload` 出现异常时显示异常信息的权限。
+例如，这是一个 Linux 脚本，开服前 ping baidu.com。
+
+```shell
+# 初始化一些变量
+
+while true; do
+
+  # 显示一些信息
+  
+  # 检查网络状态
+  if ping -c 1 -w 1 https://baidu.com > /dev/null; then
+    
+    # 开服
+    eval ${command}
+
+    echo "${server} 将在 10s 后自动重启"
+    sleep 10s
+  else
+    echo "网络故障，停止自动重启"
+    break
+  fi
+done
+pause
+```
