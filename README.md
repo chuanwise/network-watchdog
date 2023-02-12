@@ -2,6 +2,8 @@
 
 本插件意在当 `Minecraft` 服务器宿主网络故障时，自动关闭 `Minecraft` 服务器。 以避免故障时，可能对宿主机进行的硬重启等操作杀死服务器而导致插件未能正确关闭，引发数据丢失等问题。
 
+* **用户 QQ 群**：[`1028959718`](https://qm.qq.com/cgi-bin/qm/qr?k=ZPqDNor2d9RMBIjnsfFYSlve17YcFd9v&jump_from=webapi&authKey=s7Hz3jcwb27TD4/qg60FEaBJwaqqMQGclJWYb3CkMv5C6sked0/yiNVcIsGp+eaP)
+
 ## 功能
 
 本插件具备的功能如下：
