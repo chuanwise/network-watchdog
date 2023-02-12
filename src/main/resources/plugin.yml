@@ -1,5 +1,5 @@
 name: NetworkWatchdog
-version: 1.0
+version: 1.0.1
 author: Chuanwise
 main: cn.chuanwise.networkwatchdog.NetworkWatchdogPlugin
 softdepend:

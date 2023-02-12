@@ -31,11 +31,11 @@ public class NetworkWatchdogCommand
             .filter(s -> !s.isEmpty())
             .collect(Collectors.toList());
         
-        if (!arguments.isEmpty()) {
+        if (arguments.size() != 1 || !arguments.get(0).equals("reload")) {
             displayUsage(sender);
             return true;
         }
-    
+        
         final String permission = "network-watchdog.command";
         if (sender.hasPermission(permission)) {
             boolean success = true;
