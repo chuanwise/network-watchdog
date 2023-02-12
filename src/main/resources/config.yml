@@ -1,22 +1,11 @@
 # see: https://github.com/Chuanwise/network-watchdog
 
-# Is function enable.
 enable: true
-
-# Is debug logs printed.
 debug: false
-
-# Testing URLs.
+introduce: false
+interval: 6000
+threshold: 1
 urls:
   - https://www.qq.com
   - https://www.baidu.com
   - https://cn.bing.com
-
-# Send self introduction to all HTTP URLs, message key is self-introduction.
-introduce: false
-
-# How many tick(s) should check if network is connected.
-interval: 6000
-
-# Shut down the server after checking how many continuous times for checking network.
-threshold: 1
