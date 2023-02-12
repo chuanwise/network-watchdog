@@ -36,7 +36,7 @@ public class NetworkWatchdogConfiguration {
     /**
      * How many tick(s) should check if network is connected.
      */
-    private long interval = 20;
+    private int interval = 20;
     
     /**
      * Shut down the server after checking how many
@@ -69,11 +69,11 @@ public class NetworkWatchdogConfiguration {
         this.urls = urls;
     }
     
-    public long getInterval() {
+    public int getInterval() {
         return interval;
     }
     
-    public void setInterval(long interval) {
+    public void setInterval(int interval) {
         if (interval <= 0) {
             throw new IllegalArgumentException("Interval should be greater than 0!");
         }
