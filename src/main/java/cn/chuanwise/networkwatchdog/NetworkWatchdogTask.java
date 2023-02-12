@@ -76,7 +76,7 @@ public class NetworkWatchdogTask
                     final HttpURLConnection connection = (HttpURLConnection) urlConnection;
                     final String introduction = NetworkWatchdogPlugin.getInstance()
                         .getMessages()
-                        .format("self-introduction");
+                        .format("self-introduction", ((double) configuration.getInterval()) / 20 / urls.size());
     
                     connection.setRequestProperty("User-Agent", introduction);
                     
@@ -136,6 +136,7 @@ public class NetworkWatchdogTask
                     Loggers.warning("NetworkDisconnectedEvent cancelled");
                 } else {
                     Loggers.error("Shutdown for network disconnected");
+                    
                     NetworkWatchdogPlugin.getInstance()
                         .getServer()
                         .shutdown();
